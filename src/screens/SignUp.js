@@ -14,6 +14,8 @@ import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {COLORS} from '../assets/colors';
+import firestore from '@react-native-firebase/firestore';
+
 
 const SingUp = ({navigation}) => {
   const [nome, setNome] = useState('');
@@ -28,23 +30,36 @@ const SingUp = ({navigation}) => {
           .createUserWithEmailAndPassword(email, password)
           .then(() => {
             let userFirebase = auth().currentUser;
-            userFirebase
-              .sendEmailVerification()
+            let user = {};
+            user.nome = nome;
+            user.email = email;
+            firestore()
+              .collection('users')
+              .doc(userFirebase.uid)
+              .set(user)
               .then(() => {
-                Alert.alert(
-                  'Informação',
-                  'Foi enviado um email de confirmação para este endereço:' +
-                    email,
-                );
-                navigation.dispatch(
-                  CommonActions.reset({
-                    index: 0,
-                    routes: [{name: 'SignIn'}],
-                  }),
-                );
+                console.log('Signup, cadastrar: Usuário adicionado!');
+                userFirebase
+                  .sendEmailVerification()
+                  .then(() => {
+                    Alert.alert(
+                      'Informação',
+                      'Foi enviado um email de confirmação para este endereço:' +
+                        email,
+                    );
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [{name: 'SignIn'}],
+                      }),
+                    );
+                  })
+                  .catch((error) => {
+                    console.error('SingUp, cadastrar: ' + error);
+                  });
               })
-              .catch(e => {
-                console.error('SingUp, entrar: ' + e);
+              .catch((error) => {
+                console.error('SingUp, cadastrar: ' + error);
               });
           })
           .catch(error => {
@@ -125,12 +140,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor:COLORS.primaryLight,
+    backgroundColor: COLORS.primaryLight,
   },
   divSuperior: {
     flex: 5,
     alignItems: 'center',
-    marginTop:150,
+    marginTop: 150,
   },
   divInferior: {
     flex: 1,

@@ -30,15 +30,6 @@ const SingIn = ({navigation}) => {
     }
   }
 
-  // const cadastrar = () =>{
-  //   navigation.dispatch(
-  //     CommonActions.reset({
-  //       index: 0,
-  //       routes: [{name: 'SignUp'}],
-  //     }),
-  //   );
-  // };
-
   const entrar = () => {
     if (email !== '' && password !== '') {
       auth()
@@ -51,12 +42,11 @@ const SingIn = ({navigation}) => {
             );
             return;
           }
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: 'AppStack'}],
-            }),
-          );
+          // navigation.dispatch(
+          //   CommonActions.navigate({
+          //     name: 'Home',
+          //   }),
+          // );
           storeUserSession({
             email,
             password,
