@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import {COLORS} from '../../assets/colors';
 
 const Button = styled.TouchableHighlight`
-  background-color: #f5f5f5;
+  background-color: #fff2;
   padding: 20px;
   margin-top: 10px;
   border-radius: 10px;
@@ -24,7 +24,6 @@ const Home = ({item, onPress}) => {
     <Button onPress={onPress} underlayColor="transparent">
       <>
         <TextName> {item.nome}</TextName>
-        <TextEmail></TextEmail>
       </>
     </Button>
   );

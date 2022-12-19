@@ -4,37 +4,20 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import Loading from '../componentes/Loading';
+import {ApiContext} from '../context/ApiProvider';
 
 const Preload = ({navigation}) => {
   const [loading, setLoading] = useState(true);
+  const {getApi} = useContext(ApiContext);
 
   const entrar = async (email, password) => {
     if (email !== '' && password !== '') {
-      // try {
-      // await auth().signInWithEmailAndPassword(email, password);
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{name: 'SignIn'}],
         }),
       );
-      // } catch (error) {
-      //   console.error('Preload, entrar: ' + error);
-      //   switch (error.code) {
-      //     case 'auth/user-not-found':
-      //       Alert.alert('Erro', 'Usuário não cadastrado.');
-      //       break;
-      //     case 'auth/wrong-password':
-      //       Alert.alert('Erro', 'Erro na senha.');
-      //       break;
-      //     case 'auth/invalid-email':
-      //       Alert.alert('Erro', 'Email inválido.');
-      //       break;
-      //     case 'auth/user-disabled':
-      //       Alert.alert('Erro', 'Usuário desabilitado.');
-      //       break;
-      //   }
-      // }
     } else {
       Alert.alert('Atenção', 'Você deve preencher todos os campos.');
     }
@@ -67,6 +50,7 @@ const Preload = ({navigation}) => {
 
   useEffect(() => {
     loginAutomatico();
+    getApi();
   }, []);
 
   return (

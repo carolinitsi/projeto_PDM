@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import MyButton from '../../componentes/MyButton';
 import {Container, FlatList} from './styles';
 import Item from './Item';
@@ -9,8 +9,7 @@ import {COLORS} from '../../assets/colors';
 import Loading from '../../componentes/Loading';
 import AddFloatButton from '../../componentes/AddFloatButton';
 import {UsuariosContext} from '../../context/UsuariosProvider';
-
-
+import {ApiContext} from '../../context/ApiProvider';
 
 const Usuarios = ({navigation, route}) => {
   const [loading, setLoading] = useState(true);
@@ -20,9 +19,11 @@ const Usuarios = ({navigation, route}) => {
   const [password, setPassword] = useState('');
   const [confirPass, setConfirmPass] = useState('');
   const {users} = useContext(UsuariosContext);
+  const {getApi} = useContext(ApiContext);
 
   useEffect(() => {
     setData(users);
+    getApi();
   }, [users]);
 
   const routeUser = item => {
@@ -35,31 +36,43 @@ const Usuarios = ({navigation, route}) => {
     );
   };
 
-  const routeAddUser = () =>{
+  const routeAddUser = () => {
     navigation.dispatch(
       CommonActions.navigate({
         name: 'Usuario',
         params: {user: null},
       }),
-    ); 
-  }
+    );
+  };
 
   const renderItem = ({item}) => (
     <Item item={item} onPress={() => routeUser(item)} />
   );
 
   return (
-    <Container>
-      <Text>Minha lista:</Text>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
+    <>
+      <Image
+        source={require('../../assets/imagens/background-title.png')}
+        style={styles.background}
       />
-      {/* {loading && <Loading/>}    */}
-      <AddFloatButton onClick={routeAddUser}/>
-    </Container>
+      <Container>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+        {/* {loading && <Loading/>}    */}
+        <AddFloatButton onClick={routeAddUser} />
+      </Container>
+    </>
   );
 };
 
 export default Usuarios;
+
+const styles = StyleSheet.create({
+  background: {
+    width: 500,
+    height: 800,
+  },
+});

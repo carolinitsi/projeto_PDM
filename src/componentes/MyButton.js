@@ -15,9 +15,9 @@ export default MyButton;
 
 const styles = StyleSheet.create({
   primaryButton: {
-    width: 200,
+    width: 100,
     height: 40,
-    backgroundColor:COLORS.primary,
+    backgroundColor:'#257A91',
     alignItems: 'center',
     paddingTop: 10,
     borderRadius: 20,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     marginBottom:20,
   },
   primaryButtonText:{
-    color: '#B03039',
+    color: 'white',
     fontWeight: 'bold',
   }
 });

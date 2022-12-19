@@ -5,6 +5,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../../src/screens/Home/index';
 import Usuarios from '../../src/screens/Usuarios/Usuarios';
 import Usuario from '../../src/screens/Usuario/Usuario';
+import Dados from '../../src/screens/Dados/Dados';
+import Semana from '../../src/screens/Semana/Semana';
 import OutraHome from '../../src/screens/OutraHome';
 import Preload from '../../src/screens/Preload';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -30,6 +32,16 @@ const AppStack = () => {
         name="Home"
         component={Home}
       />
+       {/* <Tab.Screen
+        options={{
+          tabBarLabel: 'Semana',
+          tabBarIcon: () => (
+            <Icon name="create" color={COLORS.green} size={30} />
+          ),
+        }}
+        name="Semana"
+        component={Semana}
+      /> */}
       <Tab.Screen
         options={{
           tabBarLabel: 'Settings',
@@ -59,6 +71,16 @@ const AppStack = () => {
         }}
         name="Usuario"
         component={Usuario}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: 'Api',
+          tabBarIcon: () => (
+            <Icon name="create" color={COLORS.green} size={30} />
+          ),
+        }}
+        name="Dados"
+        component={Dados}
       />
     </Tab.Navigator>
   );

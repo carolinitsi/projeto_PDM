@@ -13,9 +13,9 @@ import {
 import MyButton from '../../componentes/MyButton';
 import Loading from '../../componentes/Loading';
 import {UsuariosContext} from '../../context/UsuariosProvider';
+import {DadoContext} from '../../context/DadoProvider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {COLORS} from '../../assets/colors';
-
 
 const Usuario = ({route, navigation}) => {
   const [nome, setNome] = useState('');
@@ -23,6 +23,9 @@ const Usuario = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
   const {saveNota} = useContext(UsuariosContext);
   const {deleteNota} = useContext(UsuariosContext);
+  const {saveDado} = useContext(DadoContext);
+  const {updateDado} = useContext(DadoContext);
+  const {deleteDado} = useContext(DadoContext);
 
   useEffect(() => {
     // console.log(route.params.notas);
@@ -34,13 +37,77 @@ const Usuario = ({route, navigation}) => {
     }
   }, [route]);
 
+  // const salvar = async () => {
+  //   if (nome) {
+  //     let nota = {};
+  //     nota.id = id;
+  //     nota.nome = nome;
+  //     setLoading(true);
+  //     await saveNota(nota);
+  //     setLoading(false);
+  //     navigation.dispatch(
+  //       CommonActions.reset({
+  //         index: 0,
+  //         routes: [{name: 'Usuarios'}],
+  //       }),
+  //     );
+  //   } else {
+  //     Alert.alert('Atenção', 'Digite todos os campos!');
+  //   }
+  // };
+  // const excluir = async () => {
+  //   Alert.alert('Atenção:', 'Tem certeza que deseja excluir essa nota?', [
+  //     {
+  //       text: 'Não',
+  //       onPress: () => {},
+  //       styles: 'cancel',
+  //     },
+  //     {
+  //       text: 'Sim',
+  //       onPress: async () => {
+  //         setLoading(true);
+  //         await deleteNota(id);
+  //         setLoading(false);
+  //         navigation.dispatch(
+  //           CommonActions.reset({
+  //             index: 0,
+  //             routes: [{name: 'Usuarios'}],
+  //           }),
+  //         );
+  //       },
+  //     },
+  //     ,
+  //   ]);
+  // };
+
+  //API
+
   const salvar = async () => {
     if (nome) {
       let nota = {};
       nota.id = id;
       nota.nome = nome;
       setLoading(true);
-      await saveNota(nota);
+      await saveDado(nota);
+      setLoading(false);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Usuarios'}],
+        }),
+      );
+    } else {
+      Alert.alert('Atenção', 'Digite todos os campos!');
+    }
+  };
+
+  const update = async () => {
+    if (nome) {
+      let nota = {};
+      nota.id = id;
+      nota.nome = nome;
+      setLoading(true);
+      await updateDado(nota);
       setLoading(false);
       navigation.dispatch(
         CommonActions.reset({
@@ -64,7 +131,7 @@ const Usuario = ({route, navigation}) => {
         text: 'Sim',
         onPress: async () => {
           setLoading(true);
-          await deleteNota(id);
+          await deleteDado(id);
           setLoading(false);
           navigation.dispatch(
             CommonActions.reset({
@@ -81,9 +148,12 @@ const Usuario = ({route, navigation}) => {
   return (
     <SafeAreaView>
       <ScrollView>
+        <Image
+          source={require('../../assets/imagens/background-novaNota.png')}
+          style={styles.background}
+        />
         <View style={styles.container}>
-          <Text style={styles.titulo}> <Icon name="create" color={COLORS.green} size={30} />Nova nota:</Text>
-          <TextInput 
+          <TextInput
             style={styles.texto}
             placeholder="Nova nota"
             keyboardType="nome-address"
@@ -91,8 +161,11 @@ const Usuario = ({route, navigation}) => {
             onChangeText={t => setNome(t)}
             value={nome}
           />
-          <MyButton texto="Salvar" onClick={salvar} />
-          {id ? <MyButton texto="Excluir" onClick={excluir} /> : null}
+          <View style={styles.containerButtons}>
+            {!id ? <MyButton texto="Salvar ✅" onClick={salvar} /> : null}
+            {id ? <MyButton texto="Deletar❌" onClick={excluir} /> : null}
+            {id ? <MyButton texto="Salvar ✅" onClick={update} /> : null}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -102,22 +175,30 @@ const Usuario = ({route, navigation}) => {
 export default Usuario;
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     width: 300,
-    marginTop:200,
-    marginLeft:50,
+    marginTop: 150,
+    marginLeft: 50,
+    position: 'absolute',
   },
-  titulo: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 32,
-    marginBottom:10,
-    color:'#257A91',
+  background: {
+    width: 500,
+    height: 800,
   },
+  containerButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  botao: {
+    backgroundColor: 'red',
+  },
+ 
   texto: {
     fontSize: 18,
     padding: 30,
     backgroundColor: 'white',
-    borderRadius:20,
+    borderRadius: 20,
+    height: 100,
   },
 });
